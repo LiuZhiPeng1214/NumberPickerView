@@ -34,6 +34,9 @@ public class NumberPickerView extends LinearLayout implements View.OnClickListen
     //默认输入框最小值
     private int minDefaultNum = 0;
 
+    // 默认设置起批量
+    private int moq = 1;
+
     // 监听事件(负责警戒值回调)
     private OnClickInputListener onClickInputListener;
     public  TextView             mSubText;
@@ -158,6 +161,17 @@ public class NumberPickerView extends LinearLayout implements View.OnClickListen
         return minDefaultNum;
     }
 
+    public NumberPickerView setMoq(int moq) {
+        if (moq <= 0) {
+            this.moq = 1;
+        }else {
+            this.moq = moq;
+        }
+        return this;
+    }
+    public int  getMoq() {
+        return moq;
+    }
     /**
      * 设置默认的最小值
      *
@@ -212,7 +226,7 @@ public class NumberPickerView extends LinearLayout implements View.OnClickListen
         int widgetId = view.getId();
         int numText = getNumText();
         if (widgetId == R.id.button_sub) {
-            if (numText > minDefaultNum + 1) {
+            if ((numText-1) * moq > minDefaultNum + 1) {
                 mNumText.setText(String.valueOf(numText - 1));
                 subListener();
             } else {
@@ -225,23 +239,23 @@ public class NumberPickerView extends LinearLayout implements View.OnClickListen
             }
         } else if (widgetId == R.id.button_add) {
             if (maxValue< currentInventory) {
-                if (numText <= maxValue) {
+                if ((numText+1) * moq < maxValue) {
                     mNumText.setText(String.valueOf(numText + 1));
                     addListener();
                 }else {
                     // 超过限制数量
-                    mNumText.setText(String.valueOf(maxValue));
+                    mNumText.setText(String.valueOf(maxValue / moq));
                     mSubText.setEnabled(true);
                     mAddText.setEnabled(false);
                     warningForMaxInput();
                 }
             }else if (maxValue >= currentInventory){
-                if (numText <= currentInventory) {
+                if ((numText+1) * moq < currentInventory) {
                     mNumText.setText(String.valueOf(numText + 1));
                     addListener();
                 }else {
                     // 超过限制数量
-                    mNumText.setText(String.valueOf(currentInventory));
+                    mNumText.setText(String.valueOf(currentInventory / moq));
                     mSubText.setEnabled(true);
                     mAddText.setEnabled(false);
                     warningForInventory();
@@ -273,23 +287,23 @@ public class NumberPickerView extends LinearLayout implements View.OnClickListen
             }
             if (!TextUtils.isEmpty(inputText)) {
                 int inputNum = Integer.parseInt(inputText);
-                if (inputNum < minDefaultNum) {
+                if (inputNum *moq < minDefaultNum) {
                     // 小于警戒值
-                    mNumText.setText(String.valueOf(minDefaultNum));
+                    mNumText.setText(String.valueOf(minDefaultNum / moq));
                     warningForMinInput();
                     mSubText.setEnabled(false);
                     mAddText.setEnabled(true);
                 } else if (maxValue < currentInventory) {
                     //限量值小于库存
                     System.out.println("限量值小于库存");
-                    if (inputNum <= maxValue) {
+                    if (inputNum * moq < maxValue) {
                         mNumText.setText(inputText);
                         mSubText.setEnabled(true);
                         mAddText.setEnabled(true);
                         editListener();
-                    } else if (inputNum > maxValue ) {
+                    } else if (inputNum * moq >= maxValue ) {
                          // 超过限量
-                        mNumText.setText(String.valueOf(maxValue));
+                        mNumText.setText(String.valueOf(maxValue / 4));
                         mSubText.setEnabled(true);
                         mAddText.setEnabled(false);
                         warningForMaxInput();
@@ -298,14 +312,14 @@ public class NumberPickerView extends LinearLayout implements View.OnClickListen
                 } else if (maxValue >= currentInventory) {
                     System.out.println("限量值大于 库存");
                     // 限量值大于 库存
-                    if (inputNum <= currentInventory) {
+                    if (inputNum * moq < currentInventory) {
                         mNumText.setText(inputText);
                         mSubText.setEnabled(true);
                         mAddText.setEnabled(true);
                         editListener();
-                    } else if (inputNum > currentInventory ) {
+                    } else if (inputNum * moq >= currentInventory ) {
                         // 超过限量
-                        mNumText.setText(String.valueOf(currentInventory));
+                        mNumText.setText(String.valueOf(currentInventory / moq));
                         mSubText.setEnabled(true);
                         mAddText.setEnabled(false);
                         warningForInventory();
@@ -313,6 +327,8 @@ public class NumberPickerView extends LinearLayout implements View.OnClickListen
                 }
             }else {
                 mNumText.setText(String.valueOf(0));
+                mSubText.setEnabled(false);
+                mAddText.setEnabled(true);
                 editListener();
             }
             mNumText.addTextChangedListener(this);
