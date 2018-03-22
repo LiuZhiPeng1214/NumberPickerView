@@ -18,7 +18,7 @@
  Step 2. Add the dependency:
  ``` js
  dependencies {
-	        compile 'com.github.LiuZhiPeng1214:NumberPickerView:v1.0.0-beta'
+	        compile 'com.github.LiuZhiPeng1214:NumberPickerView:v1.0.0-alpha'
 	}
  ```
  ### 使用方法
