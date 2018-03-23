@@ -29,7 +29,7 @@ public class NumberPickerView extends LinearLayout implements View.OnClickListen
     private int textDefaultSize = 13;
 
     // 中间输入框的‘输入值
-    private EditText mNumText;
+    public EditText mNumText;
 
     //默认输入框最小值
     private int minDefaultNum = 0;
