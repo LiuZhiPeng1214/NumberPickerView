@@ -226,7 +226,7 @@ public class NumberPickerView extends LinearLayout implements View.OnClickListen
         int widgetId = view.getId();
         int numText = getNumText();
         if (widgetId == R.id.button_sub) {
-            if ((numText-1) * moq > minDefaultNum + 1) {
+            if ((numText-1) * moq >= minDefaultNum + 1) {
                 mNumText.setText(String.valueOf(numText - 1));
                 subListener();
             } else {

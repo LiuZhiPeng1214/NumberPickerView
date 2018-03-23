@@ -15,10 +15,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         NumberPickerView npvnumber = (NumberPickerView) findViewById(R.id.npv_number);
         npvnumber
-                .setCurrentInventory(50000)
+                .setCurrentInventory(100)
                 .setMinDefaultNum(0)
                 .setCurrentNum(0)
-                .setMoq(0)
                 .setmOnClickInputListener(new NumberPickerView.OnClickInputListener() {
                     @Override
                     public void onWarningForInventory(int inventory) {
